@@ -919,8 +919,8 @@
             const end = new Date();
             end.setDate(end.getDate() + 7);
 
-            const sStr = start.toISOString().split('T')[0];
-            const eStr = end.toISOString().split('T')[0];
+            const sStr = new Date(start.getTime() - (start.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
+            const eStr = new Date(end.getTime() - (end.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
 
             const res = await fetch(`/doctor/${docId}/availability?start_date=${sStr}&end_date=${eStr}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -937,7 +937,8 @@
             for (let i = 0; i < 7; i++) {
                 let d = new Date(start);
                 d.setDate(d.getDate() + i);
-                let dStr = d.toISOString().split('T')[0];
+                // Fix: Generate date string in local time to match backend
+                let dStr = new Date(d.getTime() - (d.getTimezoneOffset() * 60000)).toISOString().split('T')[0];
                 let dayName = d.toLocaleDateString('en-US', { weekday: 'short' });
                 let dateNum = d.getDate();
 
