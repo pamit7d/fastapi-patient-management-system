@@ -67,10 +67,15 @@ def get_doctor_availability(
     WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     
     # 1. Get existing appointments
+    # SQLite/Postgres compatibility: Appointment.date is String (YYYY-MM-DD)
+    # We must compare strings, not date objects
+    start_str = start_date.isoformat()
+    end_str = end_date.isoformat()
+    
     existing_appts = db.query(Appointment).filter(
         Appointment.doctor_id == doctor_id,
-        Appointment.date >= start_date,
-        Appointment.date <= end_date,
+        Appointment.date >= start_str,
+        Appointment.date <= end_str,
         Appointment.status != AppointmentStatus.CANCELLED
     ).all()
     
