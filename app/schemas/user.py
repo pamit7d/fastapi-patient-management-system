@@ -3,13 +3,16 @@ from typing import Optional
 
 class UserBase(BaseModel):
     username: str
-    full_name: str
-    email: str
-    phone: str
+    full_name: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
 
 class UserCreate(UserBase):
     password: str
     role: str = "patient"
+    full_name: Optional[str] = "Unknown"
+    email: Optional[str] = None
+    phone: Optional[str] = None
     age: Optional[int] = None
     gender: Optional[str] = None
     city: Optional[str] = None
