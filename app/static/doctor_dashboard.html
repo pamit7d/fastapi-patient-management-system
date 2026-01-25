@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard | CampusX PMS</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-dark: #4338ca;
+            --secondary: #10B981;
+            --bg-body: #F3F4F6;
+            --bg-card: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6B7280;
+            --border: #E5E7EB;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: white;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            position: fixed;
+            height: 100vh;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background-color: #EEF2FF;
+            color: var(--primary);
+        }
+
+        .nav-item i {
+            width: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 40px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover {
+            background: var(--bg-body);
+        }
+
+        .btn-danger {
+            background-color: #EF4444;
+        }
+
+        .btn-danger:hover {
+            background-color: #DC2626;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        /* Availability Styles */
+        .day-row {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            gap: 20px;
+        }
+
+        .day-row:last-child {
+            border-bottom: none;
+        }
+
+        .day-label {
+            width: 50px;
+            font-weight: 600;
+        }
+
+        .time-inputs {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="time"],
+        input[type="date"] {
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px;
+            font-family: inherit;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--primary);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Overrides List */
+        .override-item {
+            background: #FEF3C7;
+            color: #92400E;
+            padding: 10px 16px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin: 5px;
+            font-size: 0.9rem;
+        }
+
+        .close-icon {
+            cursor: pointer;
+            opacity: 0.6;
+        }
+
+        .close-icon:hover {
+            opacity: 1;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            padding: 16px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-main);
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-Booked {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+
+        .status-Completed {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .status-Cancelled {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 500px;
+            max-width: 90%;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            height: 80px;
+            resize: vertical;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-heartbeat"></i> CampusX PMS
+        </div>
+        <div class="nav-item active" onclick="showTab('appts')" id="nav-appts">
+            <i class="fas fa-calendar-alt"></i> Appointments
+        </div>
+        <div class="nav-item" onclick="showTab('avail')" id="nav-avail">
+            <i class="fas fa-clock"></i> Availability
+        </div>
+        <div class="nav-item" onclick="showTab('profile')" id="nav-profile">
+            <i class="fas fa-user"></i> My Profile
+        </div>
+        <div style="margin-top: auto;">
+            <div class="nav-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <!-- Appointments Section -->
+        <div id="section-appts">
+            <div class="header">
+                <div>
+                    <h1 id="welcome-msg">My Appointments</h1>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;" id="doc-sub-header">Loading your schedule...
+                    </p>
+                </div>
+                <button class="btn btn-outline" onclick="loadAppts()">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+
+            <div class="card">
+                <table id="appt-table">
+                    <thead>
+                        <tr>
+                            <th>Date & Time</th>
+                            <th>Patient ID</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- JS renders here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Availability Section -->
+        <div id="section-avail" class="hidden">
+            <div class="header">
+                <h1>Manage Availability</h1>
+                <button class="btn" onclick="saveAvailability()">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: 20px; font-weight:600;">Weekly Schedule</h3>
+                <div id="weekly-container">
+                    <!-- JS renders days -->
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: 20px; font-weight:600;">Specific Date Overrides</h3>
+                <div style="display:flex; gap:10px; margin-bottom:20px; align-items:flex-end;">
+                    <div class="form-group" style="margin:0;">
+                        <label>Date</label>
+                        <input type="date" id="override-date">
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                        <label>From</label>
+                        <input type="time" id="override-start">
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                        <label>To</label>
+                        <input type="time" id="override-end">
+                    </div>
+                    <button class="btn" onclick="addOverride()">Add Override</button>
+                </div>
+                <div id="override-list">
+                    <!-- Chips go here -->
+                </div>
+            </div>
+            <div class="card" style="border: 1px solid #FEE2E2; background-color: #FEF2F2;">
+                <h3 style="margin-bottom: 20px; font-weight:600; color: #991B1B;">Emergency Actions</h3>
+                <p style="margin-bottom: 10px; font-size: 0.9rem; color: #7F1D1D;">Cancel all appointments for a
+                    specific date (e.g. sick leave).</p>
+                <div style="display:flex; gap:10px; align-items:flex-end;">
+                    <div class="form-group" style="margin:0;">
+                        <label>Target Date</label>
+                        <input type="date" id="cancel-day-date">
+                    </div>
+                    <button class="btn btn-danger" onclick="emergencyCancelDay()">Cancel All Appointments</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Section -->
+        <div id="section-profile" class="hidden">
+            <div class="header">
+                <h1>My Profile</h1>
+            </div>
+            <div class="card" id="profile-card" style="padding:0; overflow:hidden;">
+                <div
+                    style="background: linear-gradient(135deg, var(--primary) 0%, #818cf8 100%); padding: 30px; text-align:center; color:white;">
+                    <div
+                        style="width:100px; height:100px; background:white; border-radius:50%; margin:0 auto 15px auto; display:flex; align-items:center; justify-content:center; color:var(--primary); font-size:2.5rem; border:4px solid rgba(255,255,255,0.3);">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h2 style="margin:0; font-size:1.8rem;" id="v-name">--</h2>
+                    <p style="opacity:0.9; font-size:0.95rem;" id="v-spec-label">--</p>
+                </div>
+
+                <div style="padding: 30px;">
+                    <div id="profile-view">
+                        <div
+                            style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:25px;">
+                            <div
+                                style="display:flex; align-items:center; gap:15px; padding:15px; background:#F9FAFB; border-radius:10px;">
+                                <div
+                                    style="width:40px; height:40px; background:#EEF2FF; border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--primary);">
+                                    <i class="fas fa-id-card"></i>
+                                </div>
+                                <div>
+                                    <label style="display:block; font-size:0.8rem; color:var(--text-muted);">Full
+                                        Name</label>
+                                    <div style="font-weight:600; font-size:1.1rem;" id="v-full-name">--</div>
+                                </div>
+                            </div>
+
+                            <div
+                                style="display:flex; align-items:center; gap:15px; padding:15px; background:#F9FAFB; border-radius:10px;">
+                                <div
+                                    style="width:40px; height:40px; background:#EEF2FF; border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--primary);">
+                                    <i class="fas fa-stethoscope"></i>
+                                </div>
+                                <div>
+                                    <label
+                                        style="display:block; font-size:0.8rem; color:var(--text-muted);">Specialization</label>
+                                    <div style="font-weight:600; font-size:1.1rem;" id="v-spec">--</div>
+                                </div>
+                            </div>
+
+                            <div
+                                style="display:flex; align-items:center; gap:15px; padding:15px; background:#F9FAFB; border-radius:10px;">
+                                <div
+                                    style="width:40px; height:40px; background:#EEF2FF; border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--primary);">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <label style="display:block; font-size:0.8rem; color:var(--text-muted);">Email
+                                        Address</label>
+                                    <div style="font-weight:600; font-size:1.1rem;" id="v-email">--</div>
+                                </div>
+                            </div>
+
+                            <div
+                                style="display:flex; align-items:center; gap:15px; padding:15px; background:#F9FAFB; border-radius:10px;">
+                                <div
+                                    style="width:40px; height:40px; background:#EEF2FF; border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--primary);">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div>
+                                    <label style="display:block; font-size:0.8rem; color:var(--text-muted);">Phone
+                                        Number</label>
+                                    <div style="font-weight:600; font-size:1.1rem;" id="v-phone">--</div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn" style="margin-top:25px;" onclick="toggleEditProfile(true)">Edit
+                            Profile</button>
+                    </div>
+
+                    <div id="profile-edit" class="hidden">
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" id="edit-full-name">
+                            </div>
+                            <div class="form-group">
+                                <label>Specialization</label>
+                                <input type="text" id="edit-spec">
+                            </div>
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" id="edit-email">
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="text" id="edit-phone">
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:10px; margin-top:10px;">
+                            <button class="btn" onclick="saveDoctorProfile()">Save Changes</button>
+                            <button class="btn btn-outline" onclick="toggleEditProfile(false)">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/notifications.js"></script>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="consult-modal">
+        <div class="modal">
+            <h2 style="margin-bottom:20px;">Consultation</h2>
+            <p style="margin-bottom:15px; color:var(--text-muted)">Patient ID: <span id="c-pid"
+                    style="font-weight:bold; color:var(--text-main)"></span></p>
+
+            <div class="form-group"><label>Diagnosis</label><textarea id="c-diag"></textarea></div>
+            <div class="form-group"><label>Private Notes</label><textarea id="c-notes"></textarea></div>
+            <div class="form-group"><label>Prescription</label><textarea id="c-rx"></textarea></div>
+
+            <div style="display:flex; gap:10px; justify-content:flex-end;">
+                <button class="btn btn-outline" onclick="closeModal('consult-modal')">Cancel</button>
+                <button class="btn" onclick="completeAppt()">Complete Appointment</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="edit-patient-modal">
+        <div class="modal">
+            <h2 style="margin-bottom:20px;">Edit Patient</h2>
+            <input type="hidden" id="ep-id">
+            <div class="form-group"><label>Full Name</label><input type="text" id="ep-name"></div>
+            <div style="display:flex; gap:15px;">
+                <div class="form-group" style="flex:1"><label>Age</label><input type="number" id="ep-age"></div>
+                <div class="form-group" style="flex:1"><label>Gender</label>
+                    <select id="ep-gender">
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group"><label>Phone</label><input type="text" id="ep-phone"></div>
+            <div class="form-group"><label>City</label><input type="text" id="ep-city"></div>
+
+            <div style="display:flex; gap:10px; justify-content:flex-end;">
+                <button class="btn btn-outline" onclick="closeModal('edit-patient-modal')">Cancel</button>
+                <button class="btn" onclick="savePatientDetails()">Save Details</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const token = localStorage.getItem('token');
+        if (!token) window.location.href = '/';
+
+        let currentAvailability = { weekly: {}, specific_dates: {} };
+        let currentApptId = null;
+        const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+        function init() {
+            renderWeeklyUI();
+            loadDoctorProfile();
+            loadAppts();
+            loadAvailability();
+        }
+
+        // Navigation
+        function showTab(tab) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById('nav-' + tab).classList.add('active');
+
+            document.getElementById('section-appts').classList.add('hidden');
+            document.getElementById('section-avail').classList.add('hidden');
+            document.getElementById('section-profile').classList.add('hidden');
+            document.getElementById('section-' + tab).classList.remove('hidden');
+        }
+
+        // Weekly UI Builder
+        function renderWeeklyUI() {
+            const container = document.getElementById('weekly-container');
+            container.innerHTML = '';
+            WEEKDAYS.forEach(day => {
+                container.innerHTML += `
+                    <div class="day-row">
+                        <div class="day-label">${day}</div>
+                        <label class="switch">
+                            <input type="checkbox" id="w-${day}-active" onchange="toggleDay('${day}')">
+                            <span class="slider"></span>
+                        </label>
+                        <div class="time-inputs hidden" id="w-${day}-times">
+                            <input type="time" id="w-${day}-start" value="09:00">
+                            <span style="color:var(--text-muted); font-size:0.9rem;">to</span>
+                            <input type="time" id="w-${day}-end" value="17:00">
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function toggleDay(day) {
+            const active = document.getElementById(`w-${day}-active`).checked;
+            const inputs = document.getElementById(`w-${day}-times`);
+            if (active) inputs.classList.remove('hidden');
+            else inputs.classList.add('hidden');
+        }
+
+        let allApptsKeyed = {};
+
+        // Data Loading
+        async function loadAppts() {
+            showToast("Refreshing appointments...", 'info');
+            try {
+                const res = await fetch('/appointments/my', { headers: { 'Authorization': `Bearer ${token}` } });
+                const data = await res.json();
+
+                // Populate lookup
+                allApptsKeyed = {};
+                data.forEach(a => allApptsKeyed[a.id] = a);
+
+                // Sort by date descending
+                data.sort((a, b) => new Date(b.date + 'T' + b.time) - new Date(a.date + 'T' + a.time));
+
+                const tbody = document.querySelector('#appt-table tbody');
+                tbody.innerHTML = '';
+
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:gray;">No appointments found</td></tr>';
+                    return;
+                }
+
+                data.forEach(a => {
+                    // "Edit" now means Edit Consultation/Prescription
+                    // We allow editing regardless of status (e.g. to fix a mistake in completed appt)
+                    let actions = `<button class="btn btn-outline" style="padding:5px 10px; font-size:0.8rem;" onclick="openConsult(${a.id}, ${a.patient_id})">Edit Consult</button>`;
+
+                    if (a.status === 'Booked') {
+                        actions += `
+                            <button class="btn btn-danger" style="padding:5px 10px; font-size:0.8rem; margin-left:5px;" onclick="cancelAppt(${a.id})"><i class="fas fa-trash"></i></button>
+                        `;
+                    }
+
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>
+                                <div style="font-weight:600;">${a.date}</div>
+                                <div style="font-size:0.85rem; color:var(--text-muted);">${a.time}</div>
+                            </td>
+                            <td>#${a.patient_id}</td>
+                            <td><span class="status-badge status-${a.status}">${a.status}</span></td>
+                            <td>${actions}</td>
+                        </tr>
+                    `;
+                });
+            } catch (e) { console.error(e); }
+        }
+
+        // Availability Logic
+        async function loadAvailability() {
+            try {
+                const res = await fetch('/doctor/availability/settings', { headers: { 'Authorization': `Bearer ${token}` } });
+                const data = await res.json();
+                currentAvailability = data; // {weekly: {...}, specific_dates: {...}}
+
+                // Render Weekly
+                if (currentAvailability.weekly) {
+                    WEEKDAYS.forEach(day => {
+                        const slots = currentAvailability.weekly[day] || [];
+                        const active = slots.length > 0;
+                        document.getElementById(`w-${day}-active`).checked = active;
+
+                        const inputContainer = document.getElementById(`w-${day}-times`);
+                        if (active) {
+                            inputContainer.classList.remove('hidden');
+                            // Infer start/end from first/last slots 
+                            // (Assumption: contiguous blocks for now, or just take min/max)
+                            if (slots.length > 0) {
+                                document.getElementById(`w-${day}-start`).value = slots[0];
+                                // End time is tricky since we stored "Start" times (e.g. 09:00). 
+                                // If we stored ["09:00", ... "16:00"], effectively it ends at 17:00.
+                                // Let's guess +1 hour for last slot
+                                let last = slots[slots.length - 1];
+                                let h = parseInt(last.split(':')[0]) + 1;
+                                document.getElementById(`w-${day}-end`).value = `${h.toString().padStart(2, '0')}:00`;
+                            }
+                        } else {
+                            inputContainer.classList.add('hidden');
+                        }
+                    });
+                }
+
+                // Render Overrides
+                if (currentAvailability.specific_dates) {
+                    renderOverrides();
+                }
+            } catch (e) { console.error("Error loading availability", e); }
+        }
+
+        function generateSlots(startStr, endStr) {
+            let slots = [];
+            const [startH, startM] = startStr.split(':').map(Number);
+            const [endH, endM] = endStr.split(':').map(Number);
+
+            let current = startH * 60 + startM;
+            const end = endH * 60 + endM;
+
+            while (current + 60 <= end) {
+                const h = Math.floor(current / 60);
+                const m = current % 60;
+                slots.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
+                current += 60;
+            }
+            return slots;
+        }
+
+        function addOverride() {
+            const date = document.getElementById('override-date').value;
+            const start = document.getElementById('override-start').value;
+            const end = document.getElementById('override-end').value;
+
+            if (!date) return showToast("Please select a date", 'error');
+
+            let slots = [];
+            if (start && end) {
+                slots = generateSlots(start, end);
+            }
+
+            if (slots.length === 0) return showToast("Invalid time range or duration < 1 hr", 'error');
+
+            currentAvailability.specific_dates[date] = slots;
+            renderOverrides();
+
+            // Auto-save changes
+            saveAvailability();
+        }
+
+        function formatTime12(timeStr) {
+            const [h, m] = timeStr.split(':').map(Number);
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            const h12 = h % 12 || 12;
+            return `${h12.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${ampm}`;
+        }
+
+        function renderOverrides() {
+            const list = document.getElementById('override-list');
+            list.innerHTML = '';
+            for (let [date, slots] of Object.entries(currentAvailability.specific_dates)) {
+                let text = 'OFF DUTY';
+                if (slots.length) {
+                    let first = slots[0];
+                    let last = slots[slots.length - 1];
+                    // Add 60 mins to last slot to get end time
+                    let [h, m] = last.split(':').map(Number);
+                    h += 1;
+
+                    // Format
+                    let startDisplay = formatTime12(first);
+                    let endStr = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+                    let endDisplay = formatTime12(endStr);
+
+                    text = `Available: ${startDisplay} - ${endDisplay}`;
+                }
+                list.innerHTML += `
+                    <div class="override-item">
+                        <i class="fas fa-calendar-day"></i> <strong>${date}</strong>: ${text}
+                        <i class="fas fa-times close-icon" onclick="removeOverride('${date}')"></i>
+                    </div>
+                `;
+            }
+        }
+
+        window.removeOverride = (d) => {
+            delete currentAvailability.specific_dates[d];
+            renderOverrides();
+        };
+
+        async function emergencyCancelDay() {
+            const date = document.getElementById('cancel-day-date').value;
+            if (!date) return showToast("Please select a date", 'error');
+
+            if (!confirm(`Are you sure you want to CANCEL ALL appointments on ${date}? This cannot be undone.`)) return;
+
+            const res = await fetch(`/doctor/cancel-day?target_date=${date}`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                showToast(data.message, 'success');
+                loadAppts(); // Refresh list if viewing that day
+            } else {
+                showToast("Failed to cancel appointments", 'error');
+            }
+        }
+
+        async function saveAvailability() {
+            WEEKDAYS.forEach(day => {
+                if (document.getElementById(`w-${day}-active`).checked) {
+                    const elStart = document.getElementById(`w-${day}-start`);
+                    const elEnd = document.getElementById(`w-${day}-end`);
+                    currentAvailability.weekly[day] = generateSlots(elStart.value, elEnd.value);
+                } else {
+                    currentAvailability.weekly[day] = [];
+                }
+            });
+
+            const res = await fetch('/doctor/availability', {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(currentAvailability)
+            });
+            if (res.ok) showToast("Schedule updated successfully!", 'success');
+            else showToast("Error saving schedule.", 'error');
+        }
+
+        // Modal Actions
+        function openConsult(id, pid) {
+            currentApptId = id;
+            document.getElementById('c-pid').innerText = pid;
+
+            // Populate existing if available
+            const appt = allApptsKeyed[id];
+            if (appt) {
+                document.getElementById('c-diag').value = appt.diagnosis || '';
+                document.getElementById('c-notes').value = appt.notes || '';
+                document.getElementById('c-rx').value = appt.prescription || '';
+            } else {
+                // Clear if not found (shouldn't happen)
+                document.getElementById('c-diag').value = '';
+                document.getElementById('c-notes').value = '';
+                document.getElementById('c-rx').value = '';
+            }
+
+            document.getElementById('consult-modal').style.display = 'flex';
+        }
+
+        async function completeAppt() {
+            const body = {
+                status: 'Completed',
+                diagnosis: document.getElementById('c-diag').value,
+                notes: document.getElementById('c-notes').value,
+                prescription: document.getElementById('c-rx').value
+            };
+
+            // Check if we are just updating an existing one or completing new
+            // The endpoint /status updates fields regardless of status string
+            // But if it's already completed, we just stay completed.
+
+            await fetch(`/appointments/${currentApptId}/status`, {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+
+            showToast("Consultation details saved", 'success');
+            closeModal('consult-modal');
+            loadAppts();
+        }
+
+        async function editPatient(pid) {
+            const res = await fetch(`/patients/${pid}`, { headers: { 'Authorization': `Bearer ${token}` } });
+            if (!res.ok) return showToast("Patient not found", 'error');
+            const p = await res.json();
+
+            document.getElementById('ep-id').value = p.patient_id;
+            document.getElementById('ep-name').value = p.name;
+            document.getElementById('ep-age').value = p.age;
+            document.getElementById('ep-gender').value = p.gender;
+            document.getElementById('ep-phone').value = p.phone;
+            document.getElementById('ep-city').value = p.city;
+
+            document.getElementById('edit-patient-modal').style.display = 'flex';
+        }
+
+        async function savePatientDetails() {
+            const pid = document.getElementById('ep-id').value;
+            const body = {
+                name: document.getElementById('ep-name').value,
+                age: parseInt(document.getElementById('ep-age').value),
+                gender: document.getElementById('ep-gender').value,
+                phone: document.getElementById('ep-phone').value,
+                city: document.getElementById('ep-city').value
+            };
+
+            const res = await fetch(`/patients/${pid}`, {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+
+            if (res.ok) {
+                closeModal('edit-patient-modal');
+                loadAppts();
+            } else {
+                showToast("Update failed", 'error');
+            }
+        }
+
+        async function cancelAppt(id) {
+            if (!confirm("Cancel appointment?")) return;
+            await fetch(`/appointments/${id}/status`, {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: 'Cancelled' })
+            });
+            loadAppts();
+        }
+
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        // Profile Management
+        async function loadDoctorProfile() {
+            try {
+                const res = await fetch('/doctor/me', { headers: { 'Authorization': `Bearer ${token}` } });
+                if (res.ok) {
+                    const doc = await res.json();
+                    document.getElementById('welcome-msg').innerText = `Welcome, Dr. ${doc.full_name.split(' ')[0]}`;
+                    document.getElementById('doc-sub-header').innerText = `${doc.specialization} specialist`;
+
+                    document.getElementById('v-name').innerText = doc.full_name;
+                    document.getElementById('v-spec-label').innerText = doc.specialization;
+                    document.getElementById('v-full-name').innerText = doc.full_name;
+                    document.getElementById('v-spec').innerText = doc.specialization;
+                    document.getElementById('v-email').innerText = doc.email;
+                    document.getElementById('v-phone').innerText = doc.phone;
+
+                    document.getElementById('edit-full-name').value = doc.full_name;
+                    document.getElementById('edit-spec').value = doc.specialization;
+                    document.getElementById('edit-email').value = doc.email;
+                    document.getElementById('edit-phone').value = doc.phone;
+                }
+            } catch (e) { console.error("Error loading doctor profile", e); }
+        }
+
+        function toggleEditProfile(edit) {
+            if (edit) {
+                document.getElementById('profile-view').classList.add('hidden');
+                document.getElementById('profile-edit').classList.remove('hidden');
+            } else {
+                document.getElementById('profile-view').classList.remove('hidden');
+                document.getElementById('profile-edit').classList.add('hidden');
+            }
+        }
+
+        async function saveDoctorProfile() {
+            const body = {
+                full_name: document.getElementById('edit-full-name').value,
+                specialization: document.getElementById('edit-spec').value,
+                email: document.getElementById('edit-email').value,
+                phone: document.getElementById('edit-phone').value
+            };
+
+            const res = await fetch('/doctor/me', {
+                method: 'PUT',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+
+            if (res.ok) {
+                showToast("Profile updated successfully", 'success');
+                loadDoctorProfile();
+                toggleEditProfile(false);
+            } else {
+                showToast("Error updating profile", 'error');
+            }
+        }
+
+        function logout() { localStorage.removeItem('token'); window.location.href = '/'; }
+
+        init();
+    </script>
+</body>
+
+</html>

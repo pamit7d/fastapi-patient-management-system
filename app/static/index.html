@@ -1,0 +1,419 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusX PMS - Welcome</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --glass: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: #0f172a;
+        }
+
+        /* Animated Background */
+        .bg-mesh {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 0% 0%, #4338ca 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, #7e22ce 0%, transparent 50%),
+                radial-gradient(circle at 100% 0%, #312e81 0%, transparent 50%),
+                radial-gradient(circle at 0% 100%, #581c87 0%, transparent 50%);
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: meshMove 20s infinite alternate ease-in-out;
+        }
+
+        @keyframes meshMove {
+            0% {
+                transform: scale(1) translate(0, 0);
+            }
+
+            100% {
+                transform: scale(1.2) translate(5%, 5%);
+            }
+        }
+
+        .container {
+            perspective: 1000px;
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            z-index: 10;
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo i {
+            font-size: 3rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 400;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            transition: all 0.3s;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            background: white;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        input:focus+i {
+            color: var(--primary);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .link-text {
+            text-align: center;
+            margin-top: 25px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .link-text span {
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .link-text span:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .show {
+            display: block;
+            animation: slideUp 0.6s forwards cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .error-msg {
+            background: #fee2e2;
+            color: #ef4444;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            margin-top: 15px;
+            text-align: center;
+            border: 1px solid #fecaca;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-mesh"></div>
+
+    <div class="container">
+        <!-- Logo/Header Area -->
+        <div class="logo">
+            <i class="fas fa-heart-pulse"></i>
+            <h1>CampusX PMS</h1>
+        </div>
+
+        <!-- Login Card -->
+        <div class="card show" id="login-card">
+            <h2>Welcome back! Please login.</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="username" placeholder="Username" required>
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" placeholder="Password" required>
+                </div>
+                <button type="submit">Sign In</button>
+            </form>
+            <div class="link-text">
+                Don't have an account? <span onclick="toggleView()">Register as Patient</span>
+            </div>
+        </div>
+
+        <!-- Register Card -->
+        <div class="card hidden" id="register-card" style="max-width: 550px; margin: 0 auto;">
+            <h2>Create your medical account</h2>
+            <form id="register-form">
+                <div class="form-group">
+                    <i class="fas fa-id-badge"></i>
+                    <input type="text" id="reg-full-name" placeholder="Full Name" required>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <i class="fas fa-user-circle"></i>
+                        <input type="text" id="reg-username" placeholder="Username" required>
+                    </div>
+                    <div class="form-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="reg-email" placeholder="Email" required>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                    <div class="form-group" style="width: 100px;">
+                        <i class="fas fa-calendar-day"></i>
+                        <input type="number" id="reg-age" placeholder="Age" required style="padding-left: 42px;">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <i class="fas fa-venus-mars"></i>
+                        <select id="reg-gender" required style="padding-left: 42px;">
+                            <option value="">Gender</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <i class="fas fa-phone"></i>
+                        <input type="text" id="reg-phone" placeholder="Phone" required style="padding-left: 42px;">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <input type="text" id="reg-city" placeholder="City" required>
+                </div>
+
+                <div class="form-group">
+                    <i class="fas fa-shield-halved"></i>
+                    <input type="password" id="reg-password" placeholder="Choose Password" required>
+                </div>
+
+                <button type="submit">Create Account</button>
+            </form>
+            <div id="reg-error" class="error-msg hidden"></div>
+            <div class="link-text">
+                Already have an account? <span onclick="toggleView()">Sign In</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onerror = function (msg, url, line) {
+            alert("JS Error: " + msg + "\nLine: " + line);
+            return false;
+        };
+        console.log("Script loaded");
+
+        function toggleView() {
+            const loginCard = document.getElementById('login-card');
+            const registerCard = document.getElementById('register-card');
+
+            if (loginCard.classList.contains('show')) {
+                loginCard.classList.replace('show', 'hidden');
+                registerCard.classList.replace('hidden', 'show');
+            } else {
+                registerCard.classList.replace('show', 'hidden');
+                loginCard.classList.replace('hidden', 'show');
+            }
+        }
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            console.log("Login submitted");
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const res = await fetch('/token', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ username, password })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    localStorage.setItem('token', data.access_token);
+
+                    // Decode token to find role
+                    const payload = JSON.parse(atob(data.access_token.split('.')[1]));
+                    const role = payload.role;
+
+                    if (role === 'admin') window.location.href = '/static/admin_dashboard.html';
+                    else if (role === 'doctor') window.location.href = '/static/doctor_dashboard.html';
+                    else if (role === 'patient') window.location.href = '/static/patient_dashboard.html';
+                    else alert('Unknown role: ' + role);
+                } else {
+                    alert('Login failed: ' + res.status);
+                }
+            } catch (err) {
+                alert('Login error: ' + err.message);
+            }
+        });
+
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            console.log("Register submitted");
+            const full_name = document.getElementById('reg-full-name').value;
+            const username = document.getElementById('reg-username').value;
+            const email = document.getElementById('reg-email').value;
+            const phone = document.getElementById('reg-phone').value;
+            const age = parseInt(document.getElementById('reg-age').value);
+            const gender = document.getElementById('reg-gender').value;
+            const city = document.getElementById('reg-city').value;
+            const password = document.getElementById('reg-password').value;
+            const errorDiv = document.getElementById('reg-error');
+
+            if (!gender) {
+                errorDiv.innerText = "Please select a gender";
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+
+            errorDiv.classList.add('hidden');
+
+            try {
+                const res = await fetch('/users/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username, full_name, email, phone,
+                        age, gender, city, password, role: 'patient'
+                    })
+                });
+
+                if (res.ok) {
+                    alert('Registration successful! Please login.');
+                    toggleView();
+                } else {
+                    const err = await res.json();
+                    const msg = err.detail || 'Registration failed';
+                    errorDiv.innerText = msg;
+                    errorDiv.classList.remove('hidden');
+                }
+            } catch (err) {
+                errorDiv.innerText = 'Registration error: ' + err.message;
+                errorDiv.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+
+</html>
