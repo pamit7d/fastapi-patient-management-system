@@ -36,6 +36,14 @@ A robust, full-stack patient management system built with **FastAPI** and **Post
 
 ---
 
+## For demo & testing purposes only
+- An admin user is automatically created at application startup:
+   - Username: admin
+   - Password: admin123
+ 
+---
+
+
 ## 📂 Project Structure
 
 ```bash
