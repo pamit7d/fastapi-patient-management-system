@@ -12,7 +12,7 @@ def init_db():
             print("Creating Admin User...")
             admin_data = UserCreate(
                 username="admin",
-                password="admin123", 
+                password="admin", 
                 role="admin",
                 full_name="Admin User",
                 email="admin@campusx.com",

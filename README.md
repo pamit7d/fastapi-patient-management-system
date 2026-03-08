@@ -1,11 +1,11 @@
 # CampusX Patient Management System
 
-A robust, full-stack patient management system built with **FastAPI** and **PostgreSQL**. Designed for scalability, security, and ease of deployment on **Render**.
+A robust, full-stack patient management system built with **FastAPI** and **PostgreSQL**. Designed for scalability, security, and ease of deployment on **Vercel** or **Render**.
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue?style=for-the-badge&logo=python)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.109-009688?style=for-the-badge&logo=fastapi)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=for-the-badge&logo=postgresql)
-![Render](https://img.shields.io/badge/Deploy%20on-Render-black?style=for-the-badge&logo=render)
+![Supabase](https://img.shields.io/badge/Database-Supabase-blueviolet?style=for-the-badge&logo=supabase)
 
 ## 🚀 Features
 
@@ -32,7 +32,8 @@ A robust, full-stack patient management system built with **FastAPI** and **Post
 - **Database**: PostgreSQL (Production) / SQLite (Local Dev)
 - **ORM**: SQLAlchemy
 - **Authentication**: JWT (JSON Web Tokens)
-- **Deployment**: Docker & Render
+- **Deployment**: Vercel / Render
+- **Database Hosting**: Supabase
 
 ---
 
@@ -101,18 +102,27 @@ python app/tests/e2e_verify.py
 
 ---
 
-## ☁️ Deployment on Render
+## ☁️ Database Setup (Supabase)
 
-This project is configured for **Zero-Config Deployment** on Render.
+1.  **Create Project**: Sign up at [supabase.com](https://supabase.com/) and create a new project.
+2.  **Get Connection String**:
+    *   Go to **Project Settings** -> **Database**.
+    *   Copy the **URI** from the "Connection string" section.
+    *   It should look like: `postgresql://postgres.[USER]:[PASSWORD]@[HOST]:6543/postgres?pgbouncer=true`
+3.  **Update Environment**: Update your `DATABASE_URL` in `.env` or project settings.
+
+---
+
+## ☁️ Deployment
+
+This project can be deployed on **Vercel** or **Render**.
 
 1. **Push to GitHub**: Make sure your repo is public or accessible.
-2. **New Web Service**: Connect your repo on Render.
-3. **Environment Variables**:
-   - `DATABASE_URL`: (Add your specific Render Postgres Internal URL here)
+2. **Environment Variables**:
+   - `DATABASE_URL`: Your Supabase URI.
    - `SECRET_KEY`: (Generate a random string)
    - `ALGORITHM`: `HS256`
    - `ACCESS_TOKEN_EXPIRE_MINUTES`: `30`
-4. **Deploy**: Render will automatically detect the `docker` environment or `python` build command.
 
 > **Note**: This app uses a hybrid database approach. It defaults to SQLite locally but switches to PostgreSQL automatically when `DATABASE_URL` contains "postgres".
 
