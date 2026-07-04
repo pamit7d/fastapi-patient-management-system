@@ -18,7 +18,15 @@ class Appointment(Base):
     date = Column(String) # YYYY-MM-DD
     time = Column(String) # HH:MM
     
-    status = Column(Enum(AppointmentStatus), default=AppointmentStatus.BOOKED)
+
+    status = Column(
+        Enum(
+            AppointmentStatus,
+            name="appointmentstatus",
+            create_type=False,
+        ),
+        default=AppointmentStatus.BOOKED,
+    )
     
     diagnosis = Column(String, nullable=True) # Medical outcome
     notes = Column(String, nullable=True)    # Doctor's private notes
