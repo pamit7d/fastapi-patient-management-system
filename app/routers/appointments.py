@@ -86,11 +86,12 @@ def get_my_appointments(db: Session = Depends(get_db), current_user: User = Depe
         for appt in appointments:
             result.append({
                 "id": appt.id,
+                "doctor_id": appt.doctor_id,          # <-- Add this
                 "patient_id": appt.patient_id,
                 "patient_name": appt.patient.name if appt.patient else "",
                 "date": appt.date,
                 "time": appt.time,
-                "status": appt.status.value,
+                "status": appt.status,
                 "diagnosis": appt.diagnosis,
                 "notes": appt.notes,
                 "prescription": appt.prescription,
