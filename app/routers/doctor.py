@@ -8,6 +8,8 @@ from ..models import User, Doctor, Appointment, AppointmentStatus
 from ..schemas import doctor as schemas
 from .deps import get_doctor, get_current_active_user
 
+import traceback
+
 router = APIRouter(prefix="/doctor", tags=["Doctor"])
 
 @router.post("/availability")
@@ -142,27 +144,41 @@ def update_doctor_profile(
         "phone": current_user.phone
     }
 
+
+
 @router.post("/cancel-day")
 def cancel_appointments_for_day(
     target_date: str,
-    db: Session = Depends(get_db), 
+    db: Session = Depends(get_db),
     current_user: User = Depends(get_doctor)
 ):
-    doctor = current_user.doctor_profile
-    if not doctor:
-         raise HTTPException(status_code=404, detail="Doctor profile not found")
-         
-    # Update all active bookings for this date/doctor
-    appts = db.query(Appointment).filter(
-        Appointment.doctor_id == doctor.id,
-        Appointment.date == target_date,
-        Appointment.status == AppointmentStatus.BOOKED
-    ).all()
-    
-    count = 0
-    for a in appts:
-        a.status = AppointmentStatus.CANCELLED
-        count += 1
-        
-    db.commit()
-    return {"message": f"Emergency cancelled {count} appointments for {target_date}"}
+    try:
+        print("Target date:", target_date)
+
+        doctor = current_user.doctor_profile
+        print("Doctor:", doctor)
+
+        if not doctor:
+            raise HTTPException(status_code=404, detail="Doctor profile not found")
+
+        appts = db.query(Appointment).filter(
+            Appointment.doctor_id == doctor.id,
+            Appointment.date == target_date,
+            Appointment.status == AppointmentStatus.BOOKED
+        ).all()
+
+        print("Appointments:", len(appts))
+
+        for a in appts:
+            print(a.id, a.status)
+            a.status = AppointmentStatus.CANCELLED
+
+        db.commit()
+
+        return {
+            "message": f"Emergency cancelled {len(appts)} appointments for {target_date}"
+        }
+
+    except Exception:
+        traceback.print_exc()
+        raise
