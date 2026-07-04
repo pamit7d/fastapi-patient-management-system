@@ -384,7 +384,7 @@
                     <thead>
                         <tr>
                             <th>Date & Time</th>
-                            <th>Patient ID</th>
+                            <th>Patient</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -692,7 +692,7 @@
                                 <div style="font-weight:600;">${a.date}</div>
                                 <div style="font-size:0.85rem; color:var(--text-muted);">${a.time}</div>
                             </td>
-                            <td>#${a.patient_id}</td>
+                            <td>${a.patient_name}</td>
                             <td><span class="status-badge status-${a.status}">${a.status}</span></td>
                             <td>${actions}</td>
                         </tr>
