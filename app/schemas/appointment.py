@@ -26,6 +26,7 @@ from .doctor import Doctor
 class Appointment(AppointmentBase):
     id: int
     patient_id: int
+    patient_name: str | None = None
     status: AppointmentStatus
     diagnosis: Optional[str] = None
     notes: Optional[str] = None
