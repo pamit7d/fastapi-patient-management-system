@@ -692,7 +692,10 @@
                                 <div style="font-weight:600;">${a.date}</div>
                                 <div style="font-size:0.85rem; color:var(--text-muted);">${a.time}</div>
                             </td>
-                            <td>${a.patient_name}</td>
+                            <td>
+                                <strong>${a.patient_name}</strong><br>
+                                <small>ID #${a.patient_id}</small>
+                            </td>
                             <td><span class="status-badge status-${a.status}">${a.status}</span></td>
                             <td>${actions}</td>
                         </tr>
