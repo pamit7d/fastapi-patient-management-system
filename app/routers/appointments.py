@@ -67,8 +67,36 @@ def get_my_appointments(db: Session = Depends(get_db), current_user: User = Depe
         if not current_user.patient_profile: return []
         return db.query(Appointment).options(joinedload(Appointment.doctor)).filter(Appointment.patient_id == current_user.patient_profile.id).all()
     elif current_user.role == "doctor":
-        if not current_user.doctor_profile: return []
-        return db.query(Appointment).options(joinedload(Appointment.patient)).filter(Appointment.doctor_id == current_user.doctor_profile.id).all()
+    if not current_user.doctor_profile:
+        return []
+
+    appointments = (
+        db.query(Appointment)
+        .options(
+            joinedload(Appointment.patient).joinedload("user")
+        )
+        .filter(
+            Appointment.doctor_id == current_user.doctor_profile.id
+        )
+        .all()
+    )
+
+    result = []
+
+    for appt in appointments:
+        result.append({
+            "id": appt.id,
+            "patient_id": appt.patient_id,
+            "patient_name": appt.patient.name if appt.patient else "",
+            "date": appt.date,
+            "time": appt.time,
+            "status": appt.status.value,
+            "diagnosis": appt.diagnosis,
+            "notes": appt.notes,
+            "prescription": appt.prescription,
+        })
+
+    return result
     elif current_user.role == "admin":
         return db.query(Appointment).options(joinedload(Appointment.doctor), joinedload(Appointment.patient)).all()
     
