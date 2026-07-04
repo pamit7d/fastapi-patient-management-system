@@ -73,7 +73,7 @@ def get_my_appointments(db: Session = Depends(get_db), current_user: User = Depe
         appointments = (
             db.query(Appointment)
             .options(
-                joinedload(Appointment.patient).joinedload("user")
+                joinedload(Appointment.patient)
             )
             .filter(
                 Appointment.doctor_id == current_user.doctor_profile.id
